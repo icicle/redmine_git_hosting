@@ -11,7 +11,8 @@
 
 		<script type="text/javascript">
 
-			guProjectName= "<%= (@project.parent ? GitHosting::get_full_parent_path(@project, false) + "/" : "" ) %>" + "<%= @project.repository.url %>".replace(/^.*\//, "")
+			//guProjectName= "<%= (@project.parent ? GitHosting::get_full_parent_path(@project, false) + "/" : "" ) %>" + "<%= @project.repository.url %>".replace(/^.*\//, "")
+			guProjectName= "<%= @project.repository.url %>".replace(/^.*\//, "")
 			guProjectIsPublic= <%= project.is_public.to_s %> ;
 			guUser= "<%= User.current.login %>"
 			guUserIsCommitter= <%= User.current.allowed_to?(:commit_access, project) ? "true" : "false" %> ;

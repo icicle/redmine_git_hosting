@@ -116,7 +116,9 @@ module GitHosting
 	end
 
 	def self.repository_name project
-		return "#{get_full_parent_path(project, false)}/#{project.identifier}".sub(/^\//, "")
+		#return "#{get_full_parent_path(project, false)}/#{project.identifier}".sub(/^\//, "")
+		#return only the project identifier irrespective of parent of the project to form git url like git@server:subproject.git
+		return "#{project.identifier}".sub(/^\//, "")
 	end
 
 	def self.repository_path project
@@ -136,7 +138,9 @@ module GitHosting
 	def self.add_route_for_project_with_map(p,m)
 		repo = p.repository
 		if repo.is_a?(Repository::Git)
-			repo_name= p.parent ? File.join(GitHosting::get_full_parent_path(p, true),p.identifier) : p.identifier
+			#repo_name= p.parent ? File.join(GitHosting::get_full_parent_path(p, true),p.identifier) : p.identifier
+			#Modified repo_name to get the subproject in repositories folder i.e git@server:subproject.git
+			repo_name= p.identifier
 			repo_path = repo_name + ".git"
 			m.connect repo_path,                  :controller => 'git_http', :p1 => '', :p2 =>'', :p3 =>'', :id=>"#{p[:identifier]}", :path=>"#{repo_path}"
 			m.connect repo_path,                  :controller => 'git_http', :p1 => '', :p2 =>'', :p3 =>'', :id=>"#{p[:identifier]}", :path=>"#{repo_path}"

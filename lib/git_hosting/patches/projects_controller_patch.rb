@@ -16,7 +16,9 @@ module GitHosting
 				if @project.module_enabled?('repository') && Setting.plugin_redmine_git_hosting['allProjectsUseGit'] == "true"
 					GitHostingObserver.set_update_active(false)
 					repo = Repository.factory("Git")
-					repo_name= @project.parent ? File.join(GitHosting::get_full_parent_path(@project, true),@project.identifier) : @project.identifier
+					#repo_name= @project.parent ? File.join(GitHosting::get_full_parent_path(@project, true),@project.identifier) : @project.identifier
+					#Modified repo_name to get the subproject in repositories folder i.e git@server:subproject.git
+					repo_name = @project.identifier
 					repo.url = repo.root_url = File.join(Setting.plugin_redmine_git_hosting['gitRepositoryBasePath'], "#{repo_name}.git")
 					@project.repository = repo
 					repo.save
@@ -47,8 +49,10 @@ module GitHosting
 							old_parent = old_parent_id != nil ? Project.find_by_id(old_parent_id) : nil
 							new_parent = new_parent_id != nil ? Project.find_by_id(new_parent_id) : nil
 
-							old_name = old_parent.is_a?(Project) ? File.join(GitHosting::get_full_parent_path(old_parent, true), old_parent.identifier,@project.identifier).gsub(/^\//, "") :  @project.identifier
-							new_name = new_parent.is_a?(Project) ? File.join(GitHosting::get_full_parent_path(new_parent, true), new_parent.identifier,@project.identifier).gsub(/^\//, "") :  @project.identifier
+							#old_name = old_parent.is_a?(Project) ? File.join(GitHosting::get_full_parent_path(old_parent, true), old_parent.identifier,@project.identifier).gsub(/^\//, "") :  @project.identifier
+							#new_name = new_parent.is_a?(Project) ? File.join(GitHosting::get_full_parent_path(new_parent, true), new_parent.identifier,@project.identifier).gsub(/^\//, "") :  @project.identifier
+							old_name = @project.identifier
+							new_name = @project.identifier
 
 							@project.repository.url = @project.repository.root_url = File.join(Setting.plugin_redmine_git_hosting['gitRepositoryBasePath'], "#{new_name}.git")
 							@project.repository.save

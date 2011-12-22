@@ -27,7 +27,9 @@ class GitHostingSettingsObserver < ActiveRecord::Observer
 				all_projects.each do |p|
 					if p.repository.is_a?(Repository::Git)
 						r = p.repository
-						repo_name= p.parent ? File.join(GitHosting::get_full_parent_path(p, true),p.identifier) : p.identifier
+						#repo_name= p.parent ? File.join(GitHosting::get_full_parent_path(p, true),p.identifier) : p.identifier
+						#Modified repo_name to get the subproject in repositories folder i.e git@server:subproject.git
+						repo_name = p.identifier
 						r.url = File.join(object.value['gitRepositoryBasePath'], "#{repo_name}.git")
 						r.root_url = r.url
 						r.save

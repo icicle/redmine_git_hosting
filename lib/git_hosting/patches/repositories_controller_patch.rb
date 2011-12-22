@@ -13,7 +13,9 @@ module GitHosting
 				GitHosting.logger.debug "On edit_with_scm_settings"
 				params[:repository] ||= {}
 				if params[:repository_scm] == "Git"
-					repo_name= @project.parent ? File.join(GitHosting::get_full_parent_path(@project, true),@project.identifier) : @project.identifier
+					#repo_name= @project.parent ? File.join(GitHosting::get_full_parent_path(@project, true),@project.identifier) : @project.identifier
+				  #Modified repo_name to get the subproject in repositories folder i.e git@server:subproject.git
+					repo_name = @project.identifier
 					params[:repository][:url] = File.join(Setting.plugin_redmine_git_hosting['gitRepositoryBasePath'], "#{repo_name}.git")
 				end
 
